@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: raw_sc
+    description: "Raw source data"
+    tables:
+      - name: emp_json
+        description: "Raw JSON employee data"
