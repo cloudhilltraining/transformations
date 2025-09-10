@@ -1,21 +1,22 @@
 {{ config(
-    materialized='incremental',
-    unique_key='id'
+    materialized='incremental'
 ) }}
-
-
-{% set fields = ['name', 'age', 'city', 'address.city', 'address.zip_code'] %}
 
 WITH source_data AS (
     SELECT
-        id,
-        {{ select_json_fields(fields) | replace('address.city', 'nested_city') | replace('address.zip_code', 'zip_code') }},
-        -- Simulate updated_at timestamp
-        DATEADD(day, id, '2023-01-01') AS updated_at
-    FROM {{ source('raw_sc', 'emp_json') }}
+        id AS ID,
+        json_data:name::STRING AS NAME,
+        json_data:age::STRING AS AGE,
+        json_data:city::STRING AS CITY,  -- assuming you have a top-level city (might not exist)
+        json_data:address.city::STRING AS NESTED_CITY,
+        json_data:address.zip_code::STRING AS ZIP_CODE,
+        updated_at AS UPDATED_AT
+    FROM raw_sample.raw_sc.emp_json
 
     {% if is_incremental() %}
-        WHERE DATEADD(day, id, '2023-01-01') > (SELECT MAX(updated_at) FROM {{ this }})
+      WHERE updated_at > (
+          SELECT COALESCE(MAX(updated_at), '1900-01-01') FROM {{ this }}
+      )
     {% endif %}
 )
 
