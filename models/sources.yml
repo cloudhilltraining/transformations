@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: employee_source
+    description: "Source data from RAW_SAMPLE.RAW_SC schema"
+    database: RAW_SAMPLE
+    schema: RAW_SC
+    tables:
+      - name: EMP_TABLE
+        description: "Employee table with ID and name"
+
+  - name: raw_sc
+    description: "Raw JSON source data"
+    tables:
+      - name: emp_json
+        description: "Raw JSON employee data"
+
+
+  - name: raw_json
+    description: "Raw JSON source data"
+    # You can add database and schema here if known, example:
+    database: RAW_SAMPLE
+    schema: RAW_SC
+    tables:
+      - name: emp_json
+        description: "Raw JSON employee data"
