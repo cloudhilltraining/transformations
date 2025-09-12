@@ -14,7 +14,6 @@ models:
         description: "User's email address"
         tests:
           - not_null:
-              arguments: {}
               severity: warn
 
       - name: user_status
@@ -23,6 +22,11 @@ models:
           - accepted_values:
               arguments:
                 values: ['active', 'inactive', 'pending']
+
+      - name: user_age_category
+        description: "Categorized user age based on signup date"
+        tests:
+          - no_long_term_recent_user
 
   - name: stg_user_profiles
     description: "Stage user profiles linked to users"
