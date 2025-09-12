@@ -24,3 +24,20 @@ sources:
     tables:
       - name: emp_json
         description: "Raw JSON employee data"
+
+
+  - name: raw
+    description: "Raw signup user data for dbt testing and macros"
+    database: RAW_SAMPLE
+    schema: RAW_SC	
+    tables:
+      - name: users
+        description: "Raw user signup data"
+        freshness:
+          warn_after: {count: 2, period: day}
+          error_after: {count: 5, period: day}
+        loaded_at_field: signup_date
+
+      #  Added user_profiles source for relationships test
+      - name: user_profiles
+        description: "User profiles linked to users"
