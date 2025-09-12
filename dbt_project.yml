@@ -40,3 +40,6 @@ models:
     # Applies to all files under models/example/
     example:
       +materialized: table
+query-comment:
+    comment: "{{ project_name }} | model: {{ model.name }} | executed by DBT"
+    append: true
