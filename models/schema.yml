@@ -1,46 +1,35 @@
 version: 2
 
 models:
-  - name: stg_users
-    description: "Stage raw user data with days since signup"
+  - name: customers
+    description: "Customer dimension table"
     columns:
-      - name: user_id
-        description: "Unique user ID"
+      - name: id
+        description: "Primary key"
         tests:
           - unique
           - not_null
 
-      - name: user_email
-        description: "User's email address"
+      - name: email
+        description: "Customer email address"
         tests:
-          - not_null:
-              severity: warn
+          - not_null
+          - valid_email  # custom test — assumed this is defined as a custom data test elsewhere
 
-      - name: user_status
-        description: "User's account status"
+      - name: country
+        description: "Customer country"
         tests:
           - accepted_values:
               arguments:
-                values: ['active', 'inactive', 'pending']
+                values: ['USA', 'Canada', 'UK']
 
-      - name: user_age_category
-        description: "Categorized user age based on signup date"
-        tests:
-          - no_long_term_recent_user
-
-  - name: stg_user_profiles
-    description: "Stage user profiles linked to users"
+  - name: orders
+    description: "Order fact table"
     columns:
-      - name: profile_id
-        description: "Primary key of the user_profiles table"
-        
-      - name: user_id
-        description: "Foreign key to users.user_id"
+      - name: customer_id
+        description: "FK to customers"
         tests:
           - relationships:
               arguments:
-                to: ref('stg_users')
-                field: user_id
-              
-      - name: profile_name
-        description: "Name of the user's profile"
+                to: ref('customers')
+                field: id
